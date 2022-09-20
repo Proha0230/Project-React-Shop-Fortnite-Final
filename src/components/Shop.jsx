@@ -4,7 +4,6 @@ import {Preloader} from './Preloader';
 import {GoodsList} from './GoodsList';
 import {Cart} from './Cart';
 import {BasketList} from './BasketList';
-import { BasketItem } from './BasketItem';
 
 
 function Shop () {
@@ -13,11 +12,51 @@ function Shop () {
     const [order, setOrder] = useState ([]);
     const [isBasketShow, setBasketShow] = useState (false);
 
+
+// Функция увеличения позиций товара в корзине на +1 (кол-во шт (quantity))
+    const incrQuantity = (itemId) => {
+        const newOrder = order.map ((el) => {
+            if (el.mainId === itemId) {
+                const newQuantity = el.quantity +1;
+                return {
+                    ...el,
+                    quantity: newQuantity
+                };
+            } else {
+                return el;
+            }
+        })
+        setOrder(newOrder);
+    };
+
+// Функция удаления позиций товара в корзине на -1 (кол-во шт (quantity))
+    const decrQuantity = (itemId) => {
+        const newOrder = order.map ((el) => {
+            if (el.mainId === itemId) {
+                const newQuantity = el.quantity -1;
+                return {
+                    ...el,
+                    quantity: newQuantity >= 0 ? newQuantity : 0,
+                };
+            } else {
+                return el;
+            }
+        })
+        setOrder(newOrder);
+    };
+    
+
+
+// функция состояния отображения/скрытия корзины
     const handleBasketShow = () => {
         setBasketShow(!isBasketShow)
     };
 
-
+// Функция удаления элемента (товара) из корзины
+    const removeFromBasket = (itemId) => {
+        const newOrder = order.filter ((el) => el.mainId !== itemId);
+        setOrder(newOrder);
+    };
 
     const addToBasket = (item) => {
         const itemIndex = order.findIndex ((orderItem) => orderItem.mainId === item.mainId);
@@ -66,7 +105,12 @@ function Shop () {
     <main className="container content">
         <Cart quantity = {order.length} handleBasketShow = {handleBasketShow} />
         {loading ? <Preloader /> : <GoodsList goods={goods} addToBasket={addToBasket}/>}
-        {isBasketShow && <BasketList order = {order} handleBasketShow = {handleBasketShow} /> }
+        {isBasketShow && <BasketList 
+        order = {order} 
+        handleBasketShow = {handleBasketShow} 
+        removeFromBasket = {removeFromBasket} 
+        incrQuantity = {incrQuantity}
+        decrQuantity = {decrQuantity} /> }
     </main>
     );
 }

@@ -4,6 +4,7 @@ import {Preloader} from './Preloader';
 import {GoodsList} from './GoodsList';
 import {Cart} from './Cart';
 import {BasketList} from './BasketList';
+import {Alert} from './Alert'
 
 
 function Shop () {
@@ -11,6 +12,11 @@ function Shop () {
     const [loading, setLoading] = useState (true);
     const [order, setOrder] = useState ([]);
     const [isBasketShow, setBasketShow] = useState (false);
+    const [alertName, setAlertName] = useState ('');
+
+    const closeAlert = ()=> {
+        setAlertName('');
+    };
 
 
 // Функция увеличения позиций товара в корзине на +1 (кол-во шт (quantity))
@@ -84,6 +90,7 @@ function Shop () {
             })
             setOrder (newOrder)
         }
+        setAlertName(item.displayName)
     };
 
     useEffect ( function getGoods () {
@@ -111,6 +118,7 @@ function Shop () {
         removeFromBasket = {removeFromBasket} 
         incrQuantity = {incrQuantity}
         decrQuantity = {decrQuantity} /> }
+        {alertName && <Alert name={alertName} closeAlert={closeAlert} />}
     </main>
     );
 }

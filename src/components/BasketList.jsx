@@ -26,6 +26,9 @@ function BasketList (props) {
                 <li className="collection-item" style={{fontSize:"20px"}}>Корзина пуста</li>    
             )}
             <li className="collection-item active" style={{fontSize:"25px", backgroundColor:"aqua", color:"black"}}>Общая стоимость: {totalPrice} руб. </li>
+            <li className="collection-item">
+                <button className="btn btn-small">Оформить Заказ</button>
+            </li>
             <i className="material-icons basket-close" onClick={handleBasketShow}>close</i>
         </ul>
     );
